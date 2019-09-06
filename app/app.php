@@ -13,4 +13,5 @@ if (file_exists($envFile)) {
 
 require 'initializer.php';
 require 'controllers.php';
+require __DIR__ . '/helpers/global.php';
 require __DIR__ . '/routes/web.php';
