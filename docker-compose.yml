@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: rest-api-slim-php-nginx-container-accounts
+    ports:
+      - "3000:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on: 
+      - php-accounts
+
+  php-accounts:
+    build: ./docker/php7
+    container_name: rest-api-slim-php-php-container-accounts
+    links:
+      - mysql
+    environment:
+      - COMPAT=${PHP_SERVER:-7.3}
+      - PHP_FPM_ENABLE=1
+      - PHP_FPM_SERVER_ADDR=php
+      - PHP_FPM_SERVER_PORT=9000
+      - PHP_FPM_TIMEOUT=${HTTPD_TIMEOUT_TO_PHP_FPM:-180}
+      - DB_HOSTNAME=mysql
+      - DB_DATABASE=sintj278_accounts
+      - DB_USERNAME=root
+      - DB_PASSWORD=
+
+    volumes:
+     - ./:/var/www/html
+
+  mysql:
+    build: ./docker/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: sintj278_accounts
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: 
