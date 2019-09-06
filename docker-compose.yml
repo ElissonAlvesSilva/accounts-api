@@ -5,7 +5,7 @@ services:
     image: nginx:latest
     container_name: rest-api-slim-php-nginx-container-accounts
     ports:
-      - "3000:80"
+      - "3200:80"
     volumes:
       - ./:/var/www/html
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
