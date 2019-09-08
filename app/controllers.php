@@ -15,3 +15,7 @@ $container['ApplicationsController'] = function ($container) {
 $container['PermissionsController'] = function ($container) {
   return App\Controllers\PermissionsController($container);
 };
+
+$container['RecoveryController'] = function ($container) {
+  return App\Controllers\RecoveryController($container);
+};

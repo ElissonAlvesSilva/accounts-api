@@ -4,6 +4,7 @@ namespace App\Middleware;
 
 use App\Controllers\BaseController;
 use App\Helpers\Helpers;
+use App\Models\Permissions;
 use App\Models\Users;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -18,16 +19,17 @@ class AuthMiddleware extends BaseController
     if(!isset($headers[0])) {
       return $this->jsonResponse('bearer must be pass', 403);
     }
-
+    
     $bearer = $this->getBearerToken($headers[0]);
     try {
       $token = Helpers::decodeJWT($bearer);
     } catch (Exception $e) {
       return $this->jsonResponse($e->getMessage(), 410);
     }
+
     if(isset($token)) {
       try {
-        $this->validateUser($token);
+        $valid = $this->validateUser($token);
         $response = $next($request, $response);
         return $response;
       } catch (Exception $e) {
@@ -46,11 +48,23 @@ class AuthMiddleware extends BaseController
     return null;
   }
 
+  private function validateRoles($token) {
+    try {
+      foreach ($token->data->roles as $value) {
+        Permissions::where('id', $value->id)
+        ->firstOrFail();
+      }
+    } catch (ModelNotFoundException $e) {
+      throw new Exception('unauthorized');
+    }
+  }
+
   private function validateUser($token) {
     try {
       Users::where('id', $token->data->id)
         ->where('email', $token->data->email)
         ->firstOrFail();
+      return true;
     } catch (ModelNotFoundException $e) {
       throw new Exception('unauthorized');
     }

@@ -11,6 +11,12 @@ $app->group('/accounts', function () use ($app, $namespace) {
     $app->post('', $namespace . '\AuthController:login')->add(new DavidePastore\Slim\Validation\Validation($auth));
   });
 
+  $app->group('/recovery', function () use ($app, $namespace) {
+    // $app->get('/[{token}]', $namespace . '\RecoveryController:getById');
+    $app->post('', $namespace . '\RecoveryController:recovery');
+    $app->put('/[{token}]', $namespace . '\RecoveryController:update');
+  });
+
   $app->group('/v1', function () use ($app, $namespace) {
     $app->group('/users', function () use ($app, $namespace) {
       require __DIR__ . '/../validators/users.php';
@@ -44,9 +50,4 @@ $app->group('/accounts', function () use ($app, $namespace) {
   })->add(new AuthMiddleware);
 
 
-  // $app->group('/recovery', function () use ($app, $namespace) {
-  //   $app->get('/[{token}]', $namespace . '\RecoveryController:getById');
-  //   $app->post('', $namespace . '\RecoveryController:create');
-  //   $app->put('/[{token}]', $namespace . '\RecoveryController:update');
-  // });
 });
