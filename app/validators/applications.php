@@ -6,6 +6,5 @@ $applications = [
   'name' => v::notBlank(),
   'url' => v::notBlank(),
   'url_login' => v::notBlank(),
-  'logout_url' => v::notBlank(),
-  'token' => v::notBlank(),
+  'url_logout' => v::notBlank(),
 ];

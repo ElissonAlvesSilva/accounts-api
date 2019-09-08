@@ -12,7 +12,7 @@ class Applications extends Model
     'name',
     'url',
     'url_login',
-    'logout_url',
+    'url_logout',
     'token'
   ];
 }

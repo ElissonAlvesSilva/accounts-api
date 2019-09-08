@@ -15,6 +15,10 @@ class AuthMiddleware extends BaseController
     
     $this->setParams($request, $response, []);
     $headers = $this->request->getHeader('Authorization');
+    if(!isset($headers[0])) {
+      return $this->jsonResponse('bearer must be pass', 403);
+    }
+
     $bearer = $this->getBearerToken($headers[0]);
     try {
       $token = Helpers::decodeJWT($bearer);

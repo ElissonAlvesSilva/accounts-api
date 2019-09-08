@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\Users;
 use App\Helpers\Helpers;
+use App\Models\Permissions;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -41,6 +42,10 @@ class AuthController extends BaseController {
    }
  }
 
+ private function getRoles($user) {
+   return Permissions::where('user_id', $user['id'])->get(); 
+ }
+
  private function sendData($data) {
   $issuedat_claim = time(); // issued at
   $notbefore_claim = $issuedat_claim + 10; //not before in seconds
@@ -53,6 +58,8 @@ class AuthController extends BaseController {
           "id" => $data['id'],
           "name" => $data['name'],
           "email" => $data['email'],
+          "roles" => $this->getRoles($data),
+          
   ));
   return [
     'email' => $data['email'],

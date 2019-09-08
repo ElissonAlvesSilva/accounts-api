@@ -29,7 +29,7 @@ class ApplicationsController extends BaseController
     $this->setParams($request, $response, $args);
     $input = $this->getInput();
 
-    $duplicate = Applications::where('email', $input['email'])->first();
+    $duplicate = Applications::where('url', $input['url'])->first();
 
     if (!$duplicate) {
       if($request->getAttribute('has_errors')) {
@@ -38,7 +38,7 @@ class ApplicationsController extends BaseController
 
         return $this->jsonResponse($errors, $code);
       }
-      $input['token'] = hash('sha256', $input['token'] . SECRET_KEY);
+      $input['token'] = hash('sha256', $input['url'] . PASSWORD_SECRET_KEY);
       $user = Applications::create($input);
     }
       

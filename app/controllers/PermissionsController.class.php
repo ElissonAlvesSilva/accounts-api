@@ -29,7 +29,9 @@ class PermissionsController extends BaseController
     $this->setParams($request, $response, $args);
     $input = $this->getInput();
 
-    $duplicate = Permissions::where('email', $input['email'])->first();
+    $duplicate = Permissions::where('user_id', $input['user_id'])
+                            ->where('application_id', $input['application_id'])
+                            ->first();
 
     if (!$duplicate) {
       if($request->getAttribute('has_errors')) {
@@ -38,7 +40,6 @@ class PermissionsController extends BaseController
 
         return $this->jsonResponse($errors, $code);
       }
-      $input['token'] = hash('sha256', $input['token'] . SECRET_KEY);
       $user = Permissions::create($input);
     }
       
