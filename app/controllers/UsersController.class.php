@@ -38,7 +38,7 @@ class UsersController extends BaseController
 
         return $this->jsonResponse($errors, $code);
       }
-      $input['password'] = hash('sha256', $input['password'] . SECRET_KEY);
+      $input['password'] = hash('sha256', $input['password'] . PASSWORD_SECRET_KEY);
       $user = Users::create($input);
     }
       

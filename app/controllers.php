@@ -1,4 +1,9 @@
 <?php
+
+$container['AuthController'] = function ($container) {
+  return App\Controllers\AuthController($container);
+};
+
 $container['UsersController'] = function ($container) {
   return App\Controllers\UsersController($container);
 };
