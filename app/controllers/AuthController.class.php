@@ -30,6 +30,32 @@ class AuthController extends BaseController {
     }
 
  }
+
+ public function hasPermission($request, $response, $args) {
+
+  $this->setParams($request, $response, $args);
+  $headers = $this->request->getHeader('Authorization');
+  $input = $this->getInput();
+  if(!isset($headers[0])) {
+    return $this->jsonResponse('bearer must be pass', 403);
+  }
+  
+  $bearer = $this->getBearerToken($headers[0]);
+  try {
+    $token = Helpers::decodeJWT($bearer);
+  } catch (Exception $e) {
+    return $this->jsonResponse($e->getMessage(), 410);
+  }
+
+  if(isset($token)) {
+    try {
+      $this->validate($input);
+      return true;
+    } catch (Exception $e) {
+      return $this->jsonResponse($e->getMessage(), 403);
+    }
+  }
+ }
  
  private function validate($input) {
    try {

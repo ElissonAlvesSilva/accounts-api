@@ -13,4 +13,13 @@ class Helpers
   public function decodeJWT($token) {
     return JWT::decode($token, SECRET_KEY, array('HS256'));
   }
+
+  public function getBearerToken(string $headers) {
+    if (!empty($headers)) {
+        if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+            return $matches[1];
+        }
+    }
+    return null;
+  }
 }

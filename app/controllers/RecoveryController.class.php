@@ -6,6 +6,18 @@ use App\Models\Users;
 
 class RecoveryController extends BaseController
 {
+
+  public function valid($request, $response, $args) {
+    $this->setParams($request, $response, $args);
+    try {
+      Users::where('email', $this->args['token'])->firstOrFail();
+      return $this->jsonResponse(true, http_response_code());
+    } catch (\Exception $e) {
+      return $this->jsonResponse($e->getMessage(), 403);
+    }
+  }
+
+
   public function recovery($request, $response, $args)
   {
     $this->setParams($request, $response, $args);

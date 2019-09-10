@@ -9,10 +9,11 @@ $app->group('/accounts', function () use ($app, $namespace) {
   $app->group('/auth', function () use ($app, $namespace) {
     require __DIR__ . '/../validators/auth.php';
     $app->post('', $namespace . '\AuthController:login')->add(new DavidePastore\Slim\Validation\Validation($auth));
+    $app->post('/token', $namespace. '\AuthController:hasPermissions')->add(new DavidePastore\Slim\Validation\Validation($auth));
   });
 
   $app->group('/recovery', function () use ($app, $namespace) {
-    // $app->get('/[{token}]', $namespace . '\RecoveryController:getById');
+    $app->get('/[{token}]', $namespace . '\RecoveryController:valid');
     $app->post('', $namespace . '\RecoveryController:recovery');
     $app->put('/[{token}]', $namespace . '\RecoveryController:update');
   });

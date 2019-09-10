@@ -20,7 +20,7 @@ class AuthMiddleware extends BaseController
       return $this->jsonResponse('bearer must be pass', 403);
     }
     
-    $bearer = $this->getBearerToken($headers[0]);
+    $bearer = Helpers::getBearerToken($headers[0]);
     try {
       $token = Helpers::decodeJWT($bearer);
     } catch (Exception $e) {
@@ -37,15 +37,6 @@ class AuthMiddleware extends BaseController
       }
     }
 
-  }
-
-  private function getBearerToken(string $headers) {
-    if (!empty($headers)) {
-        if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
-            return $matches[1];
-        }
-    }
-    return null;
   }
 
   private function validateRoles($token) {
