@@ -50,7 +50,9 @@ class AuthController extends BaseController {
   if(isset($token)) {
     try {
       $this->validateUser($token);
-      return $this->jsonResponse(true, 200);
+      return $this->jsonResponse([
+        'enabled' => true,
+      ], 200);
     } catch (Exception $e) {
       return $this->jsonResponse($e->getMessage(), 403);
     }
