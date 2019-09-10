@@ -9,7 +9,7 @@ $app->group('/accounts', function () use ($app, $namespace) {
   $app->group('/auth', function () use ($app, $namespace) {
     require __DIR__ . '/../validators/auth.php';
     $app->post('', $namespace . '\AuthController:login')->add(new DavidePastore\Slim\Validation\Validation($auth));
-    $app->post('/token', $namespace. '\AuthController:hasPermissions')->add(new DavidePastore\Slim\Validation\Validation($auth));
+    $app->get('/token', $namespace. '\AuthController:hasPermissions');
   });
 
   $app->group('/recovery', function () use ($app, $namespace) {

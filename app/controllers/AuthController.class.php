@@ -31,7 +31,7 @@ class AuthController extends BaseController {
 
  }
 
- public function hasPermission($request, $response, $args) {
+ public function hasPermissions($request, $response, $args) {
 
   $this->setParams($request, $response, $args);
   $headers = $this->request->getHeader('Authorization');
@@ -40,7 +40,7 @@ class AuthController extends BaseController {
     return $this->jsonResponse('bearer must be pass', 403);
   }
   
-  $bearer = $this->getBearerToken($headers[0]);
+  $bearer = Helpers::getBearerToken($headers[0]);
   try {
     $token = Helpers::decodeJWT($bearer);
   } catch (Exception $e) {
@@ -49,14 +49,25 @@ class AuthController extends BaseController {
 
   if(isset($token)) {
     try {
-      $this->validate($input);
-      return true;
+      $this->validateUser($token);
+      return $this->jsonResponse(true, 200);
     } catch (Exception $e) {
       return $this->jsonResponse($e->getMessage(), 403);
     }
   }
  }
- 
+
+ private function validateUser($token) {
+  try {
+    Users::where('id', $token->data->id)
+      ->where('email', $token->data->email)
+      ->firstOrFail();
+    return true;
+  } catch (ModelNotFoundException $e) {
+    throw new Exception('unauthorized');
+  }
+}
+
  private function validate($input) {
    try {
      $user = Users::where('email', $input['email'])
