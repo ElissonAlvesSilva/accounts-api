@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Permissions;
 use App\Models\Users;
 
 class UsersController extends BaseController
@@ -18,6 +19,7 @@ class UsersController extends BaseController
     $this->setParams($request, $response, $args);
     try {
       $user = Users::findOrFail($this->args['id']);
+      $user['permissions'] = $this->getPermissions($this->args['id']);
       return $this->jsonResponse($user, 200);
     } catch (\Exception $e) {
       return $this->jsonResponse($e, 400);
@@ -74,5 +76,10 @@ class UsersController extends BaseController
     } catch (\Exception $e) {
       return $this->jsonResponse($e, 400);
     }
+  }
+
+  private function getPermissions($id) {
+    $permissions = Permissions::where('user_id', $id)->get();
+    return $permissions;
   }
 }
