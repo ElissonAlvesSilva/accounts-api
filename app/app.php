@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
+$settings = require 'config/settings.php';
 
 $baseDir = __DIR__ . '/../';
 $envFile = $baseDir . '.env';

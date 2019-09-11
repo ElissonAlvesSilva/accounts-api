@@ -12,5 +12,6 @@ class Permissions extends Model
     'id',
     'user_id',
     'application_id',
+    'type',
   ];
 }
